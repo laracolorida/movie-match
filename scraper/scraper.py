@@ -101,10 +101,15 @@ def get_users_ratings(user):
             movie_and_rating.append([title, rating, user])
 
         try:
+            try:
+                close_ad = cd.driver.find_element(By.XPATH, "//*[@id='pw-close-btn']/span/svg")
+                close_ad.click()
+            except NoSuchElementException:
+                continue
             next_button = cd.driver.find_element(By.XPATH, "//*[@id='content']/div/div/section/div[2]/div[2]/a")
             next_button.click()
         except NoSuchElementException:
-                break;
+                break
     
     return df_buffer
 

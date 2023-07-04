@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
 
+
 class CustomDriver:
     
     DRIVER_PATH = './chromedriver.exe'
@@ -13,6 +14,7 @@ class CustomDriver:
         self.driver = None
 
         options = Options()
+        options.add_extension("scraper\extension_5_8_0_0.crx")
         options.headless = headless
 
         self.service = Service(executable_path=self.driver_path)
