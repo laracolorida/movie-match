@@ -1,7 +1,8 @@
 from time import sleep
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+import pandas as pd
+
+from custom_driver import CustomDriver
+
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
@@ -9,7 +10,7 @@ from selenium.common.exceptions import NoSuchElementException
 movie_and_rating = []
 movies_links = []
 
-estrelas = {
+starts = {
     "★": 1,
     "★½": 1.5,
     "★★": 2,
@@ -21,48 +22,90 @@ estrelas = {
     "★★★★★": 5
 }
 
-# Creating scraper
-DRIVER_PATH = './chromedriver.exe'
-service = Service(executable_path=DRIVER_PATH)
+df = pd.DataFrame({
+        'user': [],
+        "movie_link" : [],
+        'movie_title': [],
+        'rating' : [],
+})
 
-options = Options()
-#options.headless = True
+def split_url_and_get_value(url):
+    split_items = url.split("/")
+    return split_items[-2]
 
-driver = webdriver.Chrome(service=service, options=options)
+cd = CustomDriver(headless=False)
 
 # Coletar dados de usuários na pagina https://letterboxd.com/members/ com o scraper
 
-users = ["renan_mind"]
+users = pd.read_csv('users_profiles.csv', encoding='utf-8')
+users["link"] = users["link"].apply(split_url_and_get_value)
+users = users["link"].tolist()
 
-driver.get("https://letterboxd.com/" + users[0] + "/films/")
+def iterate_over_users(users_list):
+    
+    df = pd.DataFrame({
+        'user': [],
+        "letterbox_movie" : [],
+        "movie_link" : [],
+        'movie_title': [],
+        'rating' : [],
+    })
+    
+    for user in users_list:
+        user_data = get_users_ratings(user)
+        user_data = pd.DataFrame(user_data)
+        df = pd.concat([df,user_data], ignore_index=True)
+        
+    df.to_csv("users_ratings.csv", index=False)
 
-while(True):
-    sleep(5) # Wainting so the page can load everything
 
-    # Getting titles, links and ratings
-    films_list = driver.find_elements(By.CLASS_NAME, "poster-container")
+def get_users_ratings(user):
+    
+    df_buffer = []
+        
+    cd.driver.get("https://letterboxd.com/" + user + "/films/")
+    
+    while(True):
+        sleep(5)
 
-    for item in films_list:
+        films_list = cd.driver.find_elements(By.CLASS_NAME, "poster-container")
+
+        for item in films_list:
+            try:
+                e1 = item.find_element(By.CLASS_NAME, "poster-viewingdata")
+                e2 = e1.find_element(By.CLASS_NAME, "rating")
+                rating_user = e2.text
+                rating = starts.get(rating_user)
+                
+            except NoSuchElementException:
+                continue
+            
+            e3 = item.find_element(By.CLASS_NAME, "poster")
+            e4 = e3.find_element(By.TAG_NAME, "div")
+            e5 = e4.find_element(By.CLASS_NAME, "frame")
+            
+            title = e5.get_attribute('data-original-title')
+            link = e5.get_attribute('href')
+            
+            new_data = {
+                'user': user,
+                "letterbox_movie": split_url_and_get_value(link),
+                "movie_link" : link,
+                'movie_title': title,
+                'rating' : rating
+            }
+            
+            df_buffer.append(new_data)
+            
+            movies_links.append(link)
+            movie_and_rating.append([title, rating, user])
+
         try:
-            e1 = item.find_element(By.CLASS_NAME, "poster-viewingdata")
-            e2 = e1.find_element(By.CLASS_NAME, "rating")
-            rating_user = e2.text
-            rating = estrelas.get(rating_user)
+            next_button = cd.driver.find_element(By.XPATH, "//*[@id='content']/div/div/section/div[2]/div[2]/a")
+            next_button.click()
         except NoSuchElementException:
-            continue
-        e3 = item.find_element(By.CLASS_NAME, "poster")
-        e4 = e3.find_element(By.TAG_NAME, "div")
-        e5 = e4.find_element(By.CLASS_NAME, "frame")
-        title = e5.get_attribute('data-original-title')
-        link = e5.get_attribute('href')
-        movies_links.append(link)
-        movie_and_rating.append([title, rating])
+                break;
+    
+    return df_buffer
 
-    try:
-        next = driver.find_element(By.XPATH, "//*[@id='content']/div/div/section/div[2]/div[2]/a")
-    except NoSuchElementException:
-            break;
-    next.click()
-
-
-driver.quit()
+iterate_over_users(users)

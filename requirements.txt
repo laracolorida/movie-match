@@ -3,3 +3,4 @@ sklearn
 scikit-surprise
 pyarrow
 matplotlib
+selenium
