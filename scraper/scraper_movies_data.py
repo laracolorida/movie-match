@@ -44,10 +44,14 @@ def scraper_movie_data(movie):
                 genres.append(split_url_and_get_value(href))
         
         genres = "|".join(genres)
+        
+        
+        movie_data = users_ratings[users_ratings["movie_link"] == movie]
+        movie_data = movie_data["movie_title"].unique()[0]
 
-        print([movie_name, imdb, tmdb, genres])
+        print([movie_name, imdb, tmdb, genres, movie_data])
 
-        return [movie_name, imdb, tmdb, genres]
+        return [movie_name, imdb, tmdb, genres, movie_data]
 
 
 def iterate_over_movies():
@@ -55,14 +59,13 @@ def iterate_over_movies():
 
     for movie in movies_links:
         movies_data.append(scraper_movie_data(movie))
-        break
-
+        
     return movies_data
 
 
 movies_data = iterate_over_movies()
 
-header = ['letterbox', 'imdb', 'tmdb', 'genres']
+header = ['letterbox', 'imdbId', 'tmdbId', 'genres', 'title']
 
 with open("custom_movies.csv", 'w', newline='') as file:
     writer = csv.writer(file)
@@ -71,4 +74,3 @@ with open("custom_movies.csv", 'w', newline='') as file:
 
     for movie in movies_data:
         writer.writerow(movie)
-        break

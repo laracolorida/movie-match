@@ -23,15 +23,18 @@ starts = {
 }
 
 df = pd.DataFrame({
-        'user': [],
-        "movie_link" : [],
-        'movie_title': [],
-        'rating' : [],
+    'user': [],
+    "letterbox_movie": [],
+    "movie_link": [],
+    'movie_title': [],
+    'rating': [],
 })
+
 
 def split_url_and_get_value(url):
     split_items = url.split("/")
     return split_items[-2]
+
 
 cd = CustomDriver(headless=False)
 
@@ -41,31 +44,32 @@ users = pd.read_csv('users_profiles.csv', encoding='utf-8')
 users["link"] = users["link"].apply(split_url_and_get_value)
 users = users["link"].tolist()
 
+
 def iterate_over_users(users_list):
-    
+
     df = pd.DataFrame({
         'user': [],
-        "letterbox_movie" : [],
-        "movie_link" : [],
+        "letterbox_movie": [],
+        "movie_link": [],
         'movie_title': [],
-        'rating' : [],
+        'rating': [],
     })
-    
+
     for user in users_list:
         user_data = get_users_ratings(user)
         user_data = pd.DataFrame(user_data)
-        df = pd.concat([df,user_data], ignore_index=True)
-        
+        df = pd.concat([df, user_data], ignore_index=True)
+
     df.to_csv("users_ratings.csv", index=False)
 
 
 def get_users_ratings(user):
-    
+
     df_buffer = []
-        
+
     cd.driver.get("https://letterboxd.com/" + user + "/films/")
-    
-    while(True):
+
+    while (True):
         sleep(5)
 
         films_list = cd.driver.find_elements(By.CLASS_NAME, "poster-container")
@@ -76,27 +80,27 @@ def get_users_ratings(user):
                 e2 = e1.find_element(By.CLASS_NAME, "rating")
                 rating_user = e2.text
                 rating = starts.get(rating_user)
-                
+
             except NoSuchElementException:
                 continue
-            
+
             e3 = item.find_element(By.CLASS_NAME, "poster")
             e4 = e3.find_element(By.TAG_NAME, "div")
             e5 = e4.find_element(By.CLASS_NAME, "frame")
-            
+
             title = e5.get_attribute('data-original-title')
             link = e5.get_attribute('href')
-            
+
             new_data = {
                 'user': user,
                 "letterbox_movie": split_url_and_get_value(link),
-                "movie_link" : link,
+                "movie_link": link,
                 'movie_title': title,
-                'rating' : rating
+                'rating': rating
             }
-            
+
             df_buffer.append(new_data)
-            
+
             movies_links.append(link)
             movie_and_rating.append([title, rating, user])
 
@@ -106,11 +110,12 @@ def get_users_ratings(user):
                 close_ad.click()
             except NoSuchElementException:
                 continue
+            
             next_button = cd.driver.find_element(By.XPATH, "//*[@id='content']/div/div/section/div[2]/div[2]/a")
             next_button.click()
+            
         except NoSuchElementException:
                 break
-    
-    return df_buffer
+
 
 iterate_over_users(users)
