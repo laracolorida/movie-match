@@ -1,0 +1,29 @@
+KNN BASIC:
+KNN RMSE: 0.9011410149028232
+KNN BEST PARAMS: {'sim_options': {'user_based': False}, 'k': 100, 'n_epochs': 5} 
+
+
+KNN WITH MEAN:
+KNN RMSE: 0.8840952934778521
+KNN BEST PARAMS: {'sim_options': {'user_based': False}, 'k': 200, 'n_epochs': 5} 
+
+
+KNN BASELINE:
+KNN RMSE: 0.8572425155780967
+KNN BEST PARAMS: {'sim_options': {'user_based': False}, 'k': 200, 'n_epochs': 5} 
+
+
+KNN WITH Z-SCORE:
+KNN RMSE: 0.8897134434981554
+KNN BEST PARAMS: {'sim_options': {'user_based': False}, 'k': 200, 'n_epochs': 5} 
+
+
+RECOMENDATIONS:
+KNN Basic
+1 ['Rushmore (1998)', 'Forrest Gump (1994)', 'Braveheart (1995)', 'Princess Bride, The (1987)', 'Duck Soup (1933)', 'Big (1988)', 'Platoon (1986)', 'Back to the Future (1985)', 'Monty Python and the Holy Grail (1975)', "Charlotte's Web (1973)"]
+KNN Baseline
+1 ['Princess Bride, The (1987)', 'Forrest Gump (1994)', 'Monty Python and the Holy Grail (1975)', 'Pulp Fiction (1994)', 'Raiders of the Lost Ark (Indiana Jones and the Raiders of the Lost Ark) (1981)', 'Saving Private Ryan (1998)', 'Braveheart (1995)', 'Back to the Future (1985)', 'Clockwork Orange, A (1971)', 'Platoon (1986)']
+KNN With Means
+1 ['Princess Bride, The (1987)', 'All Quiet on the Western Front (1930)', 'Forrest Gump (1994)', 'Raiders of the Lost Ark (Indiana Jones and the Raiders of the Lost Ark) (1981)', 'Pulp Fiction (1994)', 'Monty Python and the Holy Grail (1975)', 'Saving Private Ryan (1998)', 'Platoon (1986)', 'Braveheart (1995)', 'Back to the Future (1985)']
+KNN With Zscore
+1 ['Pulp Fiction (1994)', 'Princess Bride, The (1987)', 'Forrest Gump (1994)', 'Monty Python and the Holy Grail (1975)', 'Big Lebowski, The (1998)', 'Tommy Boy (1995)', 'Raiders of the Lost Ark (Indiana Jones and the Raiders of the Lost Ark) (1981)', 'Braveheart (1995)', 'Duck Soup (1933)', 'Clockwork Orange, A (1971)']
