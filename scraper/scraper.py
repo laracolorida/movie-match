@@ -70,8 +70,9 @@ def get_users_ratings(user):
     cd.driver.get("https://letterboxd.com/" + user + "/films/")
 
     while (True):
+        print('1')
         sleep(5)
-
+        print('1')
         films_list = cd.driver.find_elements(By.CLASS_NAME, "poster-container")
 
         for item in films_list:
@@ -84,6 +85,7 @@ def get_users_ratings(user):
             except NoSuchElementException:
                 continue
 
+            print('2')
             e3 = item.find_element(By.CLASS_NAME, "poster")
             e4 = e3.find_element(By.TAG_NAME, "div")
             e5 = e4.find_element(By.CLASS_NAME, "frame")
@@ -106,16 +108,18 @@ def get_users_ratings(user):
 
         try:
             try:
-                close_ad = cd.driver.find_element(By.XPATH, "//*[@id='pw-close-btn']/span/svg")
+                close_ad = cd.driver.find_element(
+                    By.XPATH, "//*[@id='pw-close-btn']/span/svg")
                 close_ad.click()
             except NoSuchElementException:
                 continue
-            
-            next_button = cd.driver.find_element(By.XPATH, "//*[@id='content']/div/div/section/div[2]/div[2]/a")
+
+            next_button = cd.driver.find_element(
+                By.XPATH, "//*[@id='content']/div/div/section/div[2]/div[2]/a")
             next_button.click()
-            
+
         except NoSuchElementException:
-                break
+            break
 
 
 iterate_over_users(users)
