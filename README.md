@@ -1,31 +1,18 @@
 # Movie Match
 
-## Sistema de Recomendação de Filmes
+## Sistema Inteligente de Recomendação de Filmes com Matrix Factorization e KNN
 
-Dataset base: MovieLens 25M + Dados 
+### Introdução
+Com a crescente oferta e disponibilidade de conteúdos midiáticos atualmente, encontrar um conteúdo correspondente aos seus interesses pode ser uma tarefa desafiadora para os usuários. Nesse cenário, os sistemas de recomendação desempenham um papel crucial ao filtrar e fornecer sugestões personalizadas aos usuários, ajudando-os a descobrir conteúdos interessantes, considerando seus históricos de avaliação e preferências individuais. Partindo dessa premissa, o presente trabalho explora a construção de um sistema inteligente de recomendação de filmes utilizando os métodos Matrix Factorization e KNN.
 
-# TODO:
+### Metodologia
+Nesse projeto foram utilizados os métodos SVD, SDV++, NMF, KNN Basic, KNN With Means, KNN Baseline e KNN WithZ-Score da biblioteca Surprise. O dataset utilizado foi o MovieLens 1M, construído pela GroupLens Research, da Universidade de Minnesota, que contém 1M de avaliações coletadas de usuários reais, com 6000 usuários e 4000 filmes. Utilizamos o RMSE como métrica de análise.
 
-[x] plotar filmes por genero, dimensoes dataset (filmes e usuarios)
-[x] plotar dados do usuario base do treinamento
-[x] dividir dataset em 2: treino e teste
-[x] entender o que é hit rate e ver se vamos aplicar ou nao
-[] entender a modificação no svd e no knn
-[] aplicar svd e knn (usuario e de filmes)
-[] pegar sinopse no tmdb
-[] fazer recomendação por content based
-[] fazer interface (se der tempo) -> pegar poster de cada filme
+### Conclusão
+A análise dos resultados revelou que tanto o SVD++ quanto o KNN Baseline apresentaram desempenhos semelhantes em termos de precisão na geração de recomendações ao se analisar os resultados do RMSE referente a cada um deles. Com base nos resultados obtidos, podemos concluir que ambos são algoritmos de recomendação eficazes, capazes de fornecer recomendações personalizadas aos usuários.
 
+É importante ressaltar que, apesar dos resultados promissores, este estudo possui algumas limitações. Dentre elas, destacam-se as restrições de hardware, o que acarretou na ausência de de um dataset atual, pois devido a isso os dataset mais recentes do MovieLens não puderam ser utilizados, tendo em vista que as versões mais recentes possuem mais dados e por consequência exigindo maior poder computacional, resultando na utilização do MovieLens 1M que possui filme até o ano de 2003. 
+Encorajamos que pesquisas futuras explorem outras abordagens e considerem a combinação de múltiplos algoritmos, além de uma abordagem que utilize deep learning para melhorar ainda mais a qualidade das recomendações em sistemas de recomendação.
 
-
-Referencias:
-
-A Survey of Recommendation Systems: Recommendation Models, Techniques, and Application Fields - https://www.mdpi.com/2079-9292/11/1/141
-
-MovieLens-1M Deep Dive — Part I - https://towardsdatascience.com/movielens-1m-deep-dive-part-i-8acfeda1ad4
-
-How you can build simple recommender systems with Surprise. - https://towardsdatascience.com/how-you-can-build-simple-recommender-systems-with-surprise-b0d32a8e4802
-
-Get To Know with Surprise - https://medium.com/tiket-com/get-to-know-with-surprise-2281dd227c3e
-
-Surprise Documentation - https://surprise.readthedocs.io/en/stable/getting_started.html#use-a-custom-dataset
+### Artigo 
+O artigo produzido a partir desse experimento está na pasta docs do repositório.
